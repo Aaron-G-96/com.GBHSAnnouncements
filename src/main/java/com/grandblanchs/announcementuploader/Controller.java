@@ -1,4 +1,4 @@
-package sample;
+package com.grandblanchs.announcementuploader;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
