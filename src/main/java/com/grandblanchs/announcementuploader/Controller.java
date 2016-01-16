@@ -26,6 +26,7 @@ public class Controller {
     public Button btn_generate;
     public ListView<String> lst_edit;
     public TextArea txt_announcement;
+    public Label lbl_number;
     public CheckBox chk_append;
 
     public int announceNumber = 0;
@@ -67,8 +68,14 @@ public class Controller {
         data.addAll(announceList.get(announceNumber));
         lst_edit.setItems(data);
         announceNumber++;
+
+        if (announceNumber == 1) {
+            lbl_number.setText(announceNumber + " Announcement");
+        }else{
+            lbl_number.setText(announceNumber + " Announcements");
+        }
+
         txt_announcement.setText("");
-        System.out.println(announceList.get(announceNumber - 1));
 
     }
 
