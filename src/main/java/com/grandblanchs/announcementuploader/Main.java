@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static void main(String[] args) {
+        //Temporary workaround to fix a hang with Windows 10 / Intel processors.
+        System.setProperty("glass.accessible.force", "false");
         launch(args);
     }
 
@@ -16,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/view/main.fxml"));
         primaryStage.setTitle("GBHS Announcement Uploader (Beta)");
-        primaryStage.setScene(new Scene(root, 1280, 800));
+        primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
     }
 

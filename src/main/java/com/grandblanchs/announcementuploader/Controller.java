@@ -2,10 +2,7 @@ package com.grandblanchs.announcementuploader;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,13 +16,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Controller {
+    public ComboBox<String> cmb_year;
+    public ComboBox<String> cmb_month;
+    public ComboBox<String> cmb_day;
+
     public Button btn_add;
-    public TextArea txt_announcement;
+    public Button btn_edit;
+    public Button btn_generate;
     public ListView<String> lst_edit;
-    public ArrayList<String> announceList = new ArrayList<>();
-    public int announceNumber = 0;
-    public ObservableList<String> data = FXCollections.observableArrayList();
+    public TextArea txt_announcement;
     public CheckBox chk_append;
+
+    public int announceNumber = 0;
+
+    public ArrayList<String> announceList = new ArrayList<>();
+    public ObservableList<String> data = FXCollections.observableArrayList();
+
     private static final String userHomeFolder = System.getProperty("user.home");
     private static final File file = new File(userHomeFolder + "/Desktop", "Announcements.xml");
 
@@ -46,8 +52,7 @@ public class Controller {
     }
 
     public void generateFile(){
-        if(chk_append.isSelected() == true){
-
+        if(chk_append.isSelected()){
 
         }
     }
