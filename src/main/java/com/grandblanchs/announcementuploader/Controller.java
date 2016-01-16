@@ -4,17 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import org.apache.commons.io.FileUtils;
 
-
-import javax.swing.*;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Optional;
 
 public class Controller {
     public ComboBox<String> cmb_year;
@@ -33,6 +32,7 @@ public class Controller {
     public ObservableList<String> years = FXCollections.observableArrayList();
     public ObservableList<String> data = FXCollections.observableArrayList();
 
+    BufferedWriter writer;
     private static final String userHomeFolder = System.getProperty("user.home");
     private static final File file = new File(userHomeFolder + "/Desktop", "Announcements.xml");
 
@@ -60,10 +60,11 @@ public class Controller {
         cmb_year.getSelectionModel().select(5);
 
         txt_announcement.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (txt_announcement.getText().equals("")) {
-                btn_add.setDisable(true);
-            }else{
+            //Don't allow blank entries to be added.
+            if (!txt_announcement.getText().isEmpty()) {
                 btn_add.setDisable(false);
+            }else{
+                btn_add.setDisable(true);
             }
         });
 
@@ -86,6 +87,15 @@ public class Controller {
 
     }
 
+    public void editAnnouncement(){
+        System.out.println(lst_edit.getSelectionModel().getSelectedIndex());
+    }
+
+    public void removeAnnouncement() {
+        data.remove(lst_edit.getSelectionModel().getSelectedIndex());
+        checkNumber();
+    }
+
     public void checkNumber() {
         if (data.size() > 0) {
             btn_edit.setDisable(false);
@@ -104,18 +114,98 @@ public class Controller {
         }
     }
 
-    public void editAnnouncement(){
-        System.out.println(lst_edit.getSelectionModel().getSelectedIndex());
-    }
-
-    public void removeAnnouncement() {
-        data.remove(lst_edit.getSelectionModel().getSelectedIndex());
-        checkNumber();
-    }
-
     public void generateFile(){
-        if(chk_append.isSelected()){
+        if (!txt_announcement.getText().isEmpty()) {
+            //Save the current entry before continuing.
+            addAnnouncement();
+        }
 
+        /*Writes either a new file or appends to an existing one depending on
+        *which option is checked.
+        */
+        try {
+            if(chk_append.isSelected()){
+                writeAppend();
+            }else{
+                writeNew();
+            }
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Whoa. Something weird just happened. Please tell those ComSci people, so they can fix me.");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
+    }
+
+    public String getDate(){
+        String month = cmb_month.getSelectionModel().getSelectedItem();
+        String day = cmb_day.getSelectionModel().getSelectedItem();
+        String year = cmb_year.getSelectionModel().getSelectedItem();
+        
+        return month + " " + day + ", " + year;
+    }
+
+    public void writeAppend() throws IOException{
+        if (file.isFile()){
+            //file is the path where we're writing
+            String fileString = FileUtils.readFileToString(file);
+            System.out.println(fileString);
+            //the boolean in the below line indicates if we should append or not
+            writer = new BufferedWriter(new java.io.FileWriter(file, false));
+            writer.write("\n<group>");
+            writer.write("\n<date>" + getDate() + "</date>");
+            for (String data1 : data) {
+                writer.write("\n<announcement>" + data1 + "</announcement>");
+            }
+            writer.write("\n</group>");
+            writer.write(fileString);
+            saveFile();
+        }else{
+            writeNew();
+        }
+
+    }
+
+    public void writeNew() throws IOException{
+        if (file.isFile()) {
+            //File will be overwritten.
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm");
+            alert.setHeaderText("Overwrite Existing File?");
+            alert.setContentText(file.getCanonicalPath() + " will be overwritten.");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                writer = new BufferedWriter(new java.io.FileWriter(file, false));
+                writer.write("\n<group>");
+                writer.write("\n<date>" + getDate() + "</date>");
+                for (String data1 : data) {
+                    writer.write("\n<announcement>" + data1 + "</announcement>");
+                }
+                writer.write("\n</group>");
+                saveFile();
+            }
+        }
+    }
+
+    public void saveFile() {
+        try {
+            if (writer != null)
+                writer.close();
+
+            //A basic message box letting the user know something good happened.
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText("File generated successfully.");
+            alert.setContentText("File location: " + file.getCanonicalPath());
+            alert.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Whoa. Something weird just happened. Please tell those ComSci people, so they can fix me.");
+            alert.setContentText(e.getMessage());
+            alert.show();
         }
     }
 }

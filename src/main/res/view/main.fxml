@@ -116,7 +116,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
          </CheckBox>
-         <Button fx:id="btn_generate" disable="true" mnemonicParsing="false" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Generate" textFill="WHITE">
+         <Button fx:id="btn_generate" disable="true" mnemonicParsing="false" onAction="#generateFile" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Generate" textFill="WHITE">
             <HBox.margin>
                <Insets left="10.0" />
             </HBox.margin>
