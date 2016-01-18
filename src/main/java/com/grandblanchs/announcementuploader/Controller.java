@@ -112,12 +112,23 @@ public class Controller {
         txt_announcement.setText("");
 
         editing = false;
-        btn_edit.setDisable(false);
-        btn_remove.setDisable(false);
-        btn_up.setDisable(false);
-        btn_down.setDisable(false);
         lst_edit.setDisable(false);
 
+    }
+
+    public void checkEdit() {
+        if (!txt_announcement.getText().isEmpty()) {
+            //Save the current entry before continuing.
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setContentText("Discard unsaved entry and continue editing?");
+
+            Optional<ButtonType> result = confirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                editAnnouncement();
+            }
+        }else {
+            editAnnouncement();
+        }
     }
 
     public void editAnnouncement(){
@@ -218,7 +229,7 @@ public class Controller {
             if(chk_append.isSelected()){
                 writeAppend();
             }else{
-                writeNew();
+                checkNew();
             }
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -252,12 +263,12 @@ public class Controller {
             writer.write(fileString);
             saveFile();
         }else{
-            writeNew();
+            checkNew();
         }
 
     }
 
-    public void writeNew() throws IOException{
+    public void checkNew() throws IOException {
         if (file.isFile()) {
             //File will be overwritten.
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -267,25 +278,22 @@ public class Controller {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                writer = new BufferedWriter(new java.io.FileWriter(file, false));
-                writer.write("\n<group>");
-                writer.write("\n<date>" + getDate() + "</date>");
-                for (String data1 : data) {
-                    writer.write("\n<announcement>" + data1 + "</announcement>");
-                }
-                writer.write("\n</group>");
-                saveFile();
+                writeNew();
             }
         }else{
-            writer = new BufferedWriter(new java.io.FileWriter(file, false));
-            writer.write("\n<group>");
-            writer.write("\n<date>" + getDate() + "</date>");
-            for (String data1 : data) {
-                writer.write("\n<announcement>" + data1 + "</announcement>");
-            }
-            writer.write("\n</group>");
-            saveFile();
+            writeNew();
         }
+    }
+
+    public void writeNew() throws IOException {
+        writer = new BufferedWriter(new java.io.FileWriter(file, false));
+        writer.write("\n<group>");
+        writer.write("\n<date>" + getDate() + "</date>");
+        for (String data1 : data) {
+            writer.write("\n<announcement>" + data1 + "</announcement>");
+        }
+        writer.write("\n</group>");
+        saveFile();
     }
 
     public void saveFile() {
