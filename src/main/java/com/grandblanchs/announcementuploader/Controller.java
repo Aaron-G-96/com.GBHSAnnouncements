@@ -7,6 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedWriter;
@@ -23,6 +26,9 @@ public class Controller {
     public Button btn_add;
     public Button btn_edit;
     public Button btn_remove;
+    public Button btn_up;
+    public Button btn_down;
+
     public Button btn_generate;
     public ListView<String> lst_edit;
     public TextArea txt_announcement;
@@ -31,6 +37,9 @@ public class Controller {
 
     public ObservableList<String> years = FXCollections.observableArrayList();
     public ObservableList<String> data = FXCollections.observableArrayList();
+
+    public MenuItem item_add;
+    public MenuItem item_generate;
 
     BufferedWriter writer;
     private static final String userHomeFolder = System.getProperty("user.home");
@@ -63,17 +72,24 @@ public class Controller {
             //Don't allow blank entries to be added.
             if (!txt_announcement.getText().isEmpty()) {
                 btn_add.setDisable(false);
+                item_add.setDisable(false);
             }else{
                 btn_add.setDisable(true);
+                item_add.setDisable(true);
             }
         });
 
         lst_edit.setOnMouseClicked(click -> {
+            checkSelected();
             if (click.getClickCount() == 2 && data.size() > 0) {
                 editAnnouncement();
             }
         });
+
+        item_add.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
+        item_generate.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.SHORTCUT_DOWN));
     }
+
     public void addAnnouncement(){
 
         data.add(txt_announcement.getText());
@@ -81,6 +97,7 @@ public class Controller {
 
         lst_edit.getSelectionModel().selectLast();
 
+        checkSelected();
         checkNumber();
 
         txt_announcement.setText("");
@@ -92,8 +109,39 @@ public class Controller {
     }
 
     public void removeAnnouncement() {
-        data.remove(lst_edit.getSelectionModel().getSelectedIndex());
-        checkNumber();
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm");
+        confirm.setHeaderText("Remove this announcement?");
+        confirm.setContentText("This cannot be undone.");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            data.remove(lst_edit.getSelectionModel().getSelectedIndex());
+            checkSelected();
+            checkNumber();
+        }
+    }
+
+    public void moveUp() {
+        String temp = data.get(lst_edit.getSelectionModel().getSelectedIndex() - 1);
+        data.set(lst_edit.getSelectionModel().getSelectedIndex() - 1, lst_edit.getSelectionModel().getSelectedItem());
+        data.set(lst_edit.getSelectionModel().getSelectedIndex(), temp);
+
+        lst_edit.setItems(data);
+        lst_edit.getSelectionModel().select(lst_edit.getSelectionModel().getSelectedIndex() - 1);
+
+        checkSelected();
+    }
+
+    public void moveDown() {
+        String temp = data.get(lst_edit.getSelectionModel().getSelectedIndex() + 1);
+        data.set(lst_edit.getSelectionModel().getSelectedIndex() + 1, lst_edit.getSelectionModel().getSelectedItem());
+        data.set(lst_edit.getSelectionModel().getSelectedIndex(), temp);
+
+        lst_edit.setItems(data);
+        lst_edit.getSelectionModel().select(lst_edit.getSelectionModel().getSelectedIndex() + 1);
+
+        checkSelected();
     }
 
     public void checkNumber() {
@@ -101,16 +149,36 @@ public class Controller {
             btn_edit.setDisable(false);
             btn_remove.setDisable(false);
             btn_generate.setDisable(false);
+            item_generate.setDisable(false);
         }else{
             btn_edit.setDisable(true);
             btn_remove.setDisable(true);
             btn_generate.setDisable(true);
+            item_generate.setDisable(true);
         }
 
         if (data.size() == 1) {
             lbl_number.setText(data.size() + " Announcement");
         }else{
             lbl_number.setText(data.size() + " Announcements");
+        }
+    }
+
+    public void checkSelected() {
+        if (data.size() < 2) {
+            btn_up.setDisable(true);
+            btn_down.setDisable(true);
+        }else {
+            if (lst_edit.getSelectionModel().getSelectedIndex() == 0) {
+                btn_up.setDisable(true);
+                btn_down.setDisable(false);
+            }else if (lst_edit.getSelectionModel().getSelectedIndex() == data.size() - 1) {
+                btn_up.setDisable(false);
+                btn_down.setDisable(true);
+            }else{
+                btn_up.setDisable(false);
+                btn_down.setDisable(false);
+            }
         }
     }
 
@@ -186,6 +254,15 @@ public class Controller {
                 writer.write("\n</group>");
                 saveFile();
             }
+        }else{
+            writer = new BufferedWriter(new java.io.FileWriter(file, false));
+            writer.write("\n<group>");
+            writer.write("\n<date>" + getDate() + "</date>");
+            for (String data1 : data) {
+                writer.write("\n<announcement>" + data1 + "</announcement>");
+            }
+            writer.write("\n</group>");
+            saveFile();
         }
     }
 

@@ -1,11 +1,16 @@
 package com.grandblanchs.announcementuploader;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -18,12 +23,27 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/view/main.fxml"));
+
+        primaryStage.setOnCloseRequest(e -> {
+            e.consume();
+            closeProgram();
+        });
+
         primaryStage.setTitle("GBHS Announcement Uploader (Beta)");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/image/icon.png")));
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
     }
 
+    private void closeProgram() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm");
+        alert.setHeaderText("Are you sure you want to exit?");
+        alert.setContentText("If you haven't generated a file, your announcements will be lost.");
 
-
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Platform.exit();
+        }
+    }
 }

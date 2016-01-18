@@ -11,13 +11,8 @@
       <VBox BorderPane.alignment="CENTER">
          <MenuBar>
             <Menu mnemonicParsing="false" text="File">
-               <MenuItem mnemonicParsing="false" text="Generate" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <MenuItem mnemonicParsing="false" text="Restart" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <MenuItem mnemonicParsing="false" text="About" />
+                <MenuItem fx:id="item_add" disable="true" mnemonicParsing="false" onAction="#addAnnouncement" text="Save Entry" />
+                <MenuItem fx:id="item_generate" disable="true" mnemonicParsing="false" onAction="#generateFile" text="Generate XML" />
             </Menu>
          </MenuBar>
          <HBox>
@@ -148,6 +143,16 @@
                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                  </HBox.margin>
              </Button>
+            <Button fx:id="btn_up" disable="true" mnemonicParsing="false" onAction="#moveUp" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Move Up" textFill="WHITE">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btn_down" disable="true" mnemonicParsing="false" onAction="#moveDown" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Move Down" textFill="WHITE">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
             <Region HBox.hgrow="ALWAYS" />
          </HBox>
          <Label fx:id="lbl_number" alignment="CENTER" text="0 Announcements" textFill="WHITE" wrapText="true">
