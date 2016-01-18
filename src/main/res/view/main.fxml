@@ -155,7 +155,7 @@
             </Button>
             <Region HBox.hgrow="ALWAYS" />
          </HBox>
-         <Label fx:id="lbl_number" alignment="CENTER" text="0 Announcements" textFill="WHITE" wrapText="true">
+         <Label fx:id="lbl_status" alignment="CENTER" text="0 Announcements" textFill="WHITE" wrapText="true">
             <VBox.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </VBox.margin></Label>

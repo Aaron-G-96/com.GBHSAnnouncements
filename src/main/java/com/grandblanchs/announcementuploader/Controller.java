@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Controller {
+
+    private boolean editing;
+
     public ComboBox<String> cmb_year;
     public ComboBox<String> cmb_month;
     public ComboBox<String> cmb_day;
@@ -32,7 +35,7 @@ public class Controller {
     public Button btn_generate;
     public ListView<String> lst_edit;
     public TextArea txt_announcement;
-    public Label lbl_number;
+    public Label lbl_status;
     public CheckBox chk_append;
 
     public ObservableList<String> years = FXCollections.observableArrayList();
@@ -91,21 +94,41 @@ public class Controller {
     }
 
     public void addAnnouncement(){
+        if (editing) {
+            data.set(lst_edit.getSelectionModel().getSelectedIndex(), txt_announcement.getText());
+        }else{
+            data.add(txt_announcement.getText());
+        }
 
-        data.add(txt_announcement.getText());
         lst_edit.setItems(data);
 
-        lst_edit.getSelectionModel().selectLast();
+        if (!editing) {
+            lst_edit.getSelectionModel().selectLast();
+        }
 
         checkSelected();
         checkNumber();
 
         txt_announcement.setText("");
 
+        editing = false;
+        btn_edit.setDisable(false);
+        btn_remove.setDisable(false);
+        btn_up.setDisable(false);
+        btn_down.setDisable(false);
+        lst_edit.setDisable(false);
+
     }
 
     public void editAnnouncement(){
-        System.out.println(lst_edit.getSelectionModel().getSelectedIndex());
+        btn_edit.setDisable(true);
+        btn_remove.setDisable(true);
+        btn_up.setDisable(true);
+        btn_down.setDisable(true);
+        lst_edit.setDisable(true);
+        lbl_status.setText("Editing announcement " + String.valueOf(lst_edit.getSelectionModel().getSelectedIndex() + 1));
+        txt_announcement.setText(data.get(lst_edit.getSelectionModel().getSelectedIndex()));
+        editing = true;
     }
 
     public void removeAnnouncement() {
@@ -158,9 +181,9 @@ public class Controller {
         }
 
         if (data.size() == 1) {
-            lbl_number.setText(data.size() + " Announcement");
+            lbl_status.setText(data.size() + " Announcement");
         }else{
-            lbl_number.setText(data.size() + " Announcements");
+            lbl_status.setText(data.size() + " Announcements");
         }
     }
 
@@ -218,7 +241,6 @@ public class Controller {
         if (file.isFile()){
             //file is the path where we're writing
             String fileString = FileUtils.readFileToString(file);
-            System.out.println(fileString);
             //the boolean in the below line indicates if we should append or not
             writer = new BufferedWriter(new java.io.FileWriter(file, false));
             writer.write("\n<group>");
