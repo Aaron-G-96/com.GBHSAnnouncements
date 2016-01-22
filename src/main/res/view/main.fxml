@@ -25,6 +25,22 @@
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </VBox.margin>
             <Region HBox.hgrow="ALWAYS" />
+            <ComboBox id="cmb_month" fx:id="cmb_weekday" prefWidth="150.0" promptText="Select Weekday">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Sunday" />
+                      <String fx:value="Monday" />
+                      <String fx:value="Tuesday" />
+                      <String fx:value="Wednesday" />
+                      <String fx:value="Thursday" />
+                      <String fx:value="Friday" />
+                      <String fx:value="Saturday" />
+                  </FXCollections>
+               </items>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </ComboBox>
             <ComboBox id="cmb_month" fx:id="cmb_month" prefWidth="150.0" promptText="Select Month">
                <items>
                   <FXCollections fx:factory="observableArrayList">

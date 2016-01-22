@@ -22,6 +22,7 @@ public class Controller {
 
     private boolean editing;
 
+    public ComboBox<String> cmb_weekday;
     public ComboBox<String> cmb_year;
     public ComboBox<String> cmb_month;
     public ComboBox<String> cmb_day;
@@ -65,6 +66,7 @@ public class Controller {
         ldt = LocalDateTime.now();
 
         //Select the current date.
+        cmb_weekday.getSelectionModel().select(ldt.getDayOfWeek().getValue());
         cmb_day.getSelectionModel().select(ldt.getDayOfMonth() - 1);
         cmb_month.getSelectionModel().select(ldt.getMonthValue() - 1);
 
@@ -241,11 +243,12 @@ public class Controller {
     }
 
     public String getDate(){
+        String weekday = cmb_weekday.getSelectionModel().getSelectedItem();
         String month = cmb_month.getSelectionModel().getSelectedItem();
         String day = cmb_day.getSelectionModel().getSelectedItem();
         String year = cmb_year.getSelectionModel().getSelectedItem();
         
-        return month + " " + day + ", " + year;
+        return weekday + ", " + month + " " + day + ", " + year;
     }
 
     public void writeAppend() throws IOException{
