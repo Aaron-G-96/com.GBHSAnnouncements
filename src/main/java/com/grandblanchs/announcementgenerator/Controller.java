@@ -1,4 +1,4 @@
-package com.grandblanchs.announcementuploader;
+package com.grandblanchs.announcementgenerator;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -66,7 +69,7 @@ public class Controller {
         ldt = LocalDateTime.now();
 
         //Select the current date.
-        cmb_weekday.getSelectionModel().select(ldt.getDayOfWeek().getValue());
+        cmb_weekday.getSelectionModel().select(ldt.getDayOfWeek().getValue() - 1);
         cmb_day.getSelectionModel().select(ldt.getDayOfMonth() - 1);
         cmb_month.getSelectionModel().select(ldt.getMonthValue() - 1);
 
@@ -219,27 +222,62 @@ public class Controller {
     }
 
     public void generateFile(){
+
         if (!txt_announcement.getText().isEmpty()) {
             //Save the current entry before continuing.
             addAnnouncement();
         }
 
-        /*Writes either a new file or appends to an existing one depending on
-        *which option is checked.
-        */
-        try {
-            if(chk_append.isSelected()){
-                writeAppend();
-            }else{
-                checkNew();
+        Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+        alert1.setTitle("Confirm");
+        alert1.setHeaderText("Ready to generate a file?");
+        alert1.setContentText("You won't be able to add or edit announcements for this date afterward. " +
+                "\n\nThe application will exit after the file is generated.");
+
+        Optional<ButtonType> result = alert1.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            /*Writes either a new file or appends to an existing one depending on
+            *which option is checked.
+            */
+            try {
+                if (dateValid()) {
+                    if (chk_append.isSelected()) {
+                        writeAppend();
+                    } else {
+                        checkNew();
+                    }
+                }else{
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Error");
+                    alert2.setHeaderText("Could not generate file.");
+                    alert2.setContentText("Date already exists in file. \n" +
+                            "You will need to select a different date or manually modify the file.");
+                    alert2.show();
+                }
+            } catch (IOException e) {
+                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                alert2.setTitle("Error");
+                alert2.setHeaderText("Whoa. Something weird just happened. Please tell those ComSci people, so they can fix me.");
+                alert2.setContentText(e.getMessage());
+                alert2.show();
             }
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Whoa. Something weird just happened. Please tell those ComSci people, so they can fix me.");
-            alert.setContentText(e.getMessage());
-            alert.show();
         }
+    }
+
+    public boolean dateValid() throws IOException {
+        Document d = Jsoup.parse(file, "UTF-8");
+        Elements group = d.select("group");
+        if (group != null) {
+            for (int i = 0; i < group.size(); i++) {
+                for (int j = 0; j < group.get(i).select("date").size(); j++) {
+                    if (group.get(i).select("date").get(i).text().equals(getDate())) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public String getDate(){
@@ -305,12 +343,15 @@ public class Controller {
                 writer.close();
 
             //A basic message box letting the user know something good happened.
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Success!");
             alert.setHeaderText("File generated successfully.");
-            alert.setContentText("File location: " + file.getCanonicalPath());
+            alert.setContentText("File location: " + file.getCanonicalPath() + "\nThe application will now exit.");
             alert.show();
-        } catch (IOException e) {
+
+            Thread.sleep(5000);
+            System.exit(0);
+        } catch (IOException |InterruptedException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Whoa. Something weird just happened. Please tell those ComSci people, so they can fix me.");

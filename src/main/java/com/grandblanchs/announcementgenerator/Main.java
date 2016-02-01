@@ -1,4 +1,4 @@
-package com.grandblanchs.announcementuploader;
+package com.grandblanchs.announcementgenerator;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,7 +29,7 @@ public class Main extends Application {
             closeProgram();
         });
 
-        primaryStage.setTitle("GBHS Announcement Uploader (Beta)");
+        primaryStage.setTitle("GBHS Announcement Generator");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/image/icon.png")));
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
@@ -39,7 +39,7 @@ public class Main extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm");
         alert.setHeaderText("Are you sure you want to exit?");
-        alert.setContentText("If you haven't generated a file, your announcements will be lost.");
+        alert.setContentText("Your announcements will be lost.");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

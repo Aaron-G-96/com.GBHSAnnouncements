@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/com.GBHSAnnouncements.iml" filepath="$PROJECT_DIR$/com.GBHSAnnouncements.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.grandblanchs.announcementgenerator.iml" filepath="$PROJECT_DIR$/com.grandblanchs.announcementgenerator.iml" />
     </modules>
   </component>
 </project>
