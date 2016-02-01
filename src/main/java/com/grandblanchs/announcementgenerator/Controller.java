@@ -271,7 +271,7 @@ public class Controller {
         if (group != null) {
             for (int i = 0; i < group.size(); i++) {
                 for (int j = 0; j < group.get(i).select("date").size(); j++) {
-                    if (group.get(i).select("date").get(i).text().equals(getDate())) {
+                    if (group.get(i).select("date").get(j).text().equals(getDate())) {
                         return false;
                     }
                 }
