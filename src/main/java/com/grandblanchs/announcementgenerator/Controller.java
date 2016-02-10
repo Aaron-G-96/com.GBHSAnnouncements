@@ -237,6 +237,8 @@ public class Controller {
         Optional<ButtonType> result = alert1.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
+            escapeXML();
+
             /*Writes either a new file or appends to an existing one depending on
             *which option is checked.
             */
@@ -265,6 +267,16 @@ public class Controller {
         }
     }
 
+    public void escapeXML() {
+        for (int i = 0; i < data.size(); i++) {
+            //Escape necessary XML characters.
+            data.set(i, data.get(i).replace("&", "&amp;"));
+            data.set(i, data.get(i).replace("\"", "&quot;"));
+            data.set(i, data.get(i).replace("'", "&apos;"));
+            data.set(i, data.get(i).replace("<", "&lt;"));
+            data.set(i, data.get(i).replace(">", "&gt;"));
+        }
+    }
     public boolean dateValid() throws IOException {
         Document d = Jsoup.parse(file, "UTF-8");
         Elements group = d.select("group");
