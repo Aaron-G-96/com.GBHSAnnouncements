@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(#C0C0C0, #666666);" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grandblanchs.announcementgenerator.Controller">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <MenuBar>
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem fx:id="item_add" disable="true" mnemonicParsing="false" onAction="#addAnnouncement" text="Save Entry" />
+                <MenuItem fx:id="item_generate" disable="true" mnemonicParsing="false" onAction="#generateFile" text="Generate XML" />
+            </Menu>
+         </MenuBar>
+         <HBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label text="Announcement List Date" />
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+         <HBox>
+            <VBox.margin>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </VBox.margin>
+            <Region HBox.hgrow="ALWAYS" />
+            <ComboBox id="cmb_month" fx:id="cmb_weekday" prefWidth="150.0" promptText="Select Weekday">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Monday" />
+                      <String fx:value="Tuesday" />
+                      <String fx:value="Wednesday" />
+                      <String fx:value="Thursday" />
+                      <String fx:value="Friday" />
+                      <String fx:value="Saturday" />
+                     <String fx:value="Sunday" />
+                  </FXCollections>
+               </items>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <ComboBox id="cmb_month" fx:id="cmb_month" prefWidth="150.0" promptText="Select Month">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="January" />
+                     <String fx:value="February" />
+                     <String fx:value="March" />
+                     <String fx:value="April" />
+                     <String fx:value="May" />
+                     <String fx:value="June" />
+                     <String fx:value="July" />
+                     <String fx:value="August" />
+                     <String fx:value="September" />
+                     <String fx:value="October" />
+                     <String fx:value="November" />
+                     <String fx:value="December" />
+                  </FXCollections>
+               </items>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <ComboBox id="cmb_day" fx:id="cmb_day" layoutX="10.0" layoutY="10.0" prefWidth="150.0" promptText="Select Day">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="1" />
+                     <String fx:value="2" />
+                     <String fx:value="3" />
+                     <String fx:value="4" />
+                     <String fx:value="5" />
+                     <String fx:value="6" />
+                     <String fx:value="7" />
+                     <String fx:value="8" />
+                     <String fx:value="9" />
+                     <String fx:value="10" />
+                     <String fx:value="11" />
+                     <String fx:value="12" />
+                     <String fx:value="13" />
+                     <String fx:value="14" />
+                     <String fx:value="15" />
+                     <String fx:value="16" />
+                     <String fx:value="17" />
+                     <String fx:value="18" />
+                     <String fx:value="19" />
+                     <String fx:value="20" />
+                     <String fx:value="21" />
+                     <String fx:value="22" />
+                     <String fx:value="23" />
+                     <String fx:value="24" />
+                     <String fx:value="25" />
+                     <String fx:value="26" />
+                     <String fx:value="27" />
+                     <String fx:value="28" />
+                     <String fx:value="29" />
+                     <String fx:value="30" />
+                     <String fx:value="31" />
+                  </FXCollections>
+               </items>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <ComboBox id="cmb_year" fx:id="cmb_year" layoutX="160.0" layoutY="10.0" prefWidth="150.0" promptText="Select Year">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </ComboBox>
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+      </VBox>
+   </top>
+   <center>
+      <TextArea fx:id="txt_announcement" promptText="Enter one announcement here, then press 'Save'" style="-fx-background-color: #E3E3E3;" stylesheets="@../style/bobcat.css" wrapText="true" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </BorderPane.margin>
+         <CheckBox fx:id="chk_append" selected="true" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Add entries to existing file" textFill="white">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         </CheckBox>
+         <Button fx:id="btn_generate" disable="true" mnemonicParsing="false" onAction="#generateFile" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Generate" textFill="WHITE">
+            <HBox.margin>
+               <Insets left="10.0" />
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </bottom>
+   <left>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <ListView fx:id="lst_edit" prefHeight="599.0" prefWidth="248.0" style="-fx-background-color: #E3E3E3;" stylesheets="">
+            <VBox.margin>
+               <Insets left="10.0" />
+            </VBox.margin>
+         </ListView>
+         <HBox>
+            <Region HBox.hgrow="ALWAYS" />
+             <Button fx:id="btn_edit" disable="true" mnemonicParsing="false" onAction="#checkEdit" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Edit" textFill="WHITE">
+                 <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                 </HBox.margin>
+             </Button>
+             <Button fx:id="btn_remove" disable="true" mnemonicParsing="false" onAction="#removeAnnouncement" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Remove" textFill="WHITE">
+                 <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                 </HBox.margin>
+             </Button>
+            <Button fx:id="btn_up" disable="true" mnemonicParsing="false" onAction="#moveUp" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Move Up" textFill="WHITE">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btn_down" disable="true" mnemonicParsing="false" onAction="#moveDown" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Move Down" textFill="WHITE">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+         <Label fx:id="lbl_status" alignment="CENTER" text="0 Announcements" textFill="WHITE" wrapText="true">
+            <VBox.margin>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </VBox.margin></Label>
+      </VBox>
+   </left>
+   <right>
+      <Button fx:id="btn_add" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#addAnnouncement" style="-fx-background-color: #A60A0A; -fx-border-color: #FFFFFF;" text="Save" textFill="WHITE" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </Button>
+   </right>
+</BorderPane>
